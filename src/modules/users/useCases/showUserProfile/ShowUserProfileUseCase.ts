@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { User } from "../../model/User";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
@@ -9,14 +10,14 @@ class ShowUserProfileUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
   execute({ user_id }: IRequest): User {
-    const findUserId = this.usersRepository.findById(user_id);
+   
+    const userProfile = this.usersRepository.findById(user_id)
 
-    if (!findUserId) {
-      throw new Error("User does not exists")
+    if(!userProfile){
+      throw new Error("User doesn't exists.")
     }
 
-    return findUserId;
-
+    return userProfile;
 
   }
 }

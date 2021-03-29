@@ -1,3 +1,4 @@
+
 import { User } from "../../model/User";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
@@ -10,15 +11,18 @@ class CreateUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
   execute({ email, name }: IRequest): User {
-    const emailAlreadyExists = this.usersRepository.findByEmail(email);
 
-    if(emailAlreadyExists) {
-      throw new Error("Email already exists!");
+    const user = this.usersRepository.findByEmail(email)
+
+    if(user){
+      throw new Error("User already exists.")
     }
-    
-    const user = this.usersRepository.create({email, name});
-
-    return user;
+    if(this.usersRepository.findByEmail(email)){
+      throw new Error("Email already exists.")
+    }
+    this.usersRepository.create({ email, name })
+  
+    return this.usersRepository.findByEmail(email)
   }
 }
 

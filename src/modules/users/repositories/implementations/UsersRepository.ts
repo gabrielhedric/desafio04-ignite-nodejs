@@ -19,50 +19,49 @@ class UsersRepository implements IUsersRepository {
   }
 
   create({ name, email }: ICreateUserDTO): User {
-    const user = new User();
+    const newUser = new User();
 
-    Object.assign(user, {
+    
+    Object.assign(newUser,
+    {
       name,
       email,
-      admin: false,
-      created_at: new Date()
-    });
+      created_at: new Date(),
+      updated_at: new Date()
+    } 
+  )
+   this.users.push(newUser)
 
-    this.users.push(user);
+   return newUser;
+}
 
-    return user;
-  }
-
-  findById(id: string): User | undefined {
-    const userId = this.users.find(user => user.id === id);
-
-    return userId;
-  }
-
-  findByEmail(email: string): User | undefined {
-    const userEmail = this.users.find(user => user.email === email);
+findById(id: string): User | undefined {
+    const idExists = this.users.find(verify=>verify.id === id)
     
-    return userEmail;
-  }
+    return idExists;
+}
 
-  turnAdmin(receivedUser: User): User {
-    const userAdmin = receivedUser;
+findByEmail(email: string): User | undefined {
+   const emailExists = this.users.find(verify=>verify.email === email)
     
-    if(receivedUser.admin) {
+    return emailExists;
+}
+
+turnAdmin(receivedUser: User): User {
+  
+  if(receivedUser.admin){
       return receivedUser;
     }
+    receivedUser.admin = true;
+    receivedUser.updated_at = new Date();
 
-    Object.assign(userAdmin, {
-      admin: true,
-      updated_at: new Date()
-    });
+    return receivedUser;
+}
 
-    return userAdmin;
-  }
-
-  list(): User[] {
-    return this.users;
-  }
+list(): User[] {
+ 
+  return this.users 
+}
 }
 
 export { UsersRepository };
